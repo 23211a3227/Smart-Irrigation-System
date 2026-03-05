@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Irrigation System Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Smart Irrigation System Calculator</h1>
+        <form id="irrigationForm">
+            <label for="cropType">Crop Type:</label>
+            <select id="cropType" name="cropType" required>
+                <option value="corn">Corn</option>
+                <option value="wheat">Wheat</option>
+                <option value="soy">Soybean</option>
+                <option value="rice">Rice</option>
+                <option value="barley">Barley</option>
+                <option value="oats">Oats</option>
+                <option value="potato">Potato</option>
+                <option value="tomato">Tomato</option>
+                <option value="lettuce">Lettuce</option>
+                <option value="carrot">Carrot</option>
+            </select><br>
+
+            <label for="soilMoisture">Soil Moisture Level (%):</label>
+            <input type="number" id="soilMoisture" name="soilMoisture" step="0.1" required><br>
+
+            <label for="fieldSize">Field Size (acres):</label>
+            <input type="number" id="fieldSize" name="fieldSize" step="0.01" required><br>
+
+            <label for="cropWaterRequirement">Crop Water Requirement (mm/day):</label>
+            <input type="number" id="cropWaterRequirement" name="cropWaterRequirement" step="0.1" required><br>
+
+            <label for="soilType">Soil Type:</label>
+            <select id="soilType" name="soilType" required>
+                <option value="loamy">Loamy</option>
+                <option value="sandy">Sandy</option>
+                <option value="clay">Clay</option>
+                <option value="silt">Silt</option>
+                <option value="peat">Peat</option>
+            </select><br>
+
+            <label for="irrigationEfficiency">Irrigation Efficiency (%):</label>
+            <input type="number" id="irrigationEfficiency" name="irrigationEfficiency" step="0.1" required><br>
+
+            <button type="button" onclick="calculateIrrigation()">Calculate</button>
+        </form>
+
+        <div id="result"></d
+
+# SMART-IRRIGATION-SYSTEM-02
+function calculateIrrigation() {
+    // Gather input values
+    const cropType = document.getElementById('cropType').value;
+    const soilMoisture = parseFloat(document.getElementById('soilMoisture').value);
+    const fieldSize = parseFloat(document.getElementById('fieldSize').value);
+    const cropWaterRequirement = parseFloat(document.getElementById('cropWaterRequirement').value);
+    const soilType = document.getElementById('soilType').value;
+    const irrigationEfficiency = parseFloat(document.getElementById('irrigationEfficiency').value) / 100;
+
+    // Constants
+    const desiredMoistureLevel = 30; // Desired moisture level in percentage (for example purposes)
+
+    // Calculate water deficit
+    const waterDeficit = Math.max(0, desiredMoistureLevel - soilMoisture);
+    const waterDeficitMm = waterDeficit * 100; // Assuming a soil depth of 100 mm
+
+    // Calculate total water needed
+    const totalWaterNeeded = cropWaterRequirement;
+
+    // Adjust for irrigation system efficiency
+    const effectiveWaterRequirement = totalWaterNeeded / irrigationEfficiency;
+
+    // Calculate total volume needed
+    const volumeNeeded = fieldSize * effectiveWaterRequirement;
+
+    // Determine if irrigation is needed
+    const isIrrigationNeeded = soilMoisture < desiredMoistureLevel;
+
+    // Display results
+    document.getElementById('result').innerHTML = `
+        <h2>Calculation Results</h2>
+        <p><strong>Is Irrigation Needed?</strong> ${isIrrigationNeeded ? 'Yes' : 'No'}</p>
+        <p><strong>Water Deficit:</strong> ${waterDeficitMm.toFixed(2)} mm</p>
+        <p><strong>Total Water Needed:</strong> ${totalWaterNeeded.toFixed(2)} mm/day</p>
+        <p><strong>Effective Water Requirement:</strong> ${effectiveWaterRequirement.toFixed(2)} mm/day</p>
+        <p><strong>Total Volume Needed:</strong> ${volumeNeeded.toFixed(2)} cubic meters</p>
+    `;
+}
+
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background: url('https://images.unsplash.com/photo-1506748686214e9df14f83f6b5a2ec08e64044b5d4e9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNjUyOXwwfDF8c2VhcmNofDd8fGFncmljdWx0dXJhbCUyMGJhY2tncm91bmR8ZW58MHx8fDE2NTc0MzQ5&ixlib=rb-1.2.1&q=80&w=1080') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    max-width: 800px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+h1 {
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Form Styles */
+form {
+    display: grid;
+    gap: 15px;
+    margin: 0;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+input:focus, select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(38, 143, 255, 0.2);
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+#result {
+    margin-top: 20px;
+    padding: 15px;
+    background: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+    
+    button {
+        font-size: 14px;
+    }
+}
